@@ -1,8 +1,6 @@
 import pandas as pd
 from pathlib import Path
 pd.set_option('display.width', None)
-import glob
-from datetime import datetime as dt
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -72,7 +70,7 @@ class SMAStrategy:
         peak = cum_returns.cummax()
         draw_down = peak - cum_returns
         max_idx = draw_down.argmax()
-        stats['max_dd'] = 1 - np.exp(cum_returns[max_idx]) / np.exp(peak[max_idx])
+        stats['max_dd'] = 1 - np.exp(cum_returns.iloc[max_idx]) / np.exp(peak.iloc[max_idx])
         strat_dd = draw_down[draw_down==0]
         strat_dd_diff = strat_dd.index[1:] - strat_dd.index[:-1]
         strat_dd_days = strat_dd_diff.map(lambda x: x.days).values
@@ -89,7 +87,7 @@ class SMAStrategy:
         ax.set_xlabel("Date")
         ax.set_ylabel("Returns %")
         ax.legend()
-        plt.show()
+        return plt.show()
     
     
 data = SMAStrategy(sma_small=4, sma_large=9, filepath = "KCB.csv")
